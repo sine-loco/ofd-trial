@@ -1,32 +1,39 @@
 package ru.snm.ofd_trial;
 
+import java.util.Properties;
+
 /**
  * @author snm
  */
 public final class OfdConfig {
 
-    private final static int DEFAULT_PORT = 8080;
-
+    private final static String DEFAULT_PORT = "8080";
     private final static String DEFAULT_PATH = "/ofd";
+
+    public static final String PROP_PORT = "port";
+    public static final String PROP_PATH = "path";
+
 
     private static volatile OfdConfig INSTANSE = null;
 
-    private OfdConfig() {}
+    public final int port;
+    public final String path;
 
-    public static synchronized OfdConfig getConfig() {
+    private OfdConfig( Properties properties ) {
+        port = Integer.parseInt( properties.getProperty( PROP_PORT, DEFAULT_PORT ) );
+
+        path =  properties.getProperty( PROP_PATH, DEFAULT_PATH );
+    }
+
+    /**
+     *
+     * @param properties loaded and valid properties
+     * @return config instance
+     */
+    public static synchronized OfdConfig getConfig( Properties properties ) {
         if ( INSTANSE == null ) {
-            INSTANSE = new OfdConfig();
+            INSTANSE = new OfdConfig( properties );
         }
         return INSTANSE;
-    }
-
-    public int getPort() {
-        // fixme implement
-        return DEFAULT_PORT;
-    }
-
-    public String getPath() {
-        // fixme implement
-        return DEFAULT_PATH;
     }
 }
