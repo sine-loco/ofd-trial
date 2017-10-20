@@ -5,7 +5,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
+import ru.snm.ofd_trial.customer.OfdCustomerFacade;
 import ru.snm.ofd_trial.http.OfdCustomerHandler;
+import ru.snm.ofd_trial.xml.SimpleXmlFunctions;
 
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
@@ -25,6 +27,12 @@ public class OfdMain {
 
 
         OfdConfig config = OfdConfig.getConfig( props );
+
+        OfdGlobalContext.initContext(
+                SimpleXmlFunctions::deserialize,
+                SimpleXmlFunctions::serialize,
+                OfdCustomerFacade::processRequest );
+
         HttpServer server = createAndStartHttp( config );
 
         logger.info( "server started" );

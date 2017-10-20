@@ -12,11 +12,20 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.powermock.api.mockito.PowerMockito;
 import ru.snm.ofd_trial.OfdConfig;
+import ru.snm.ofd_trial.OfdGlobalContext;
 import ru.snm.ofd_trial.OfdMain;
+import ru.snm.ofd_trial.customer.OfdCustomerAction;
+import ru.snm.ofd_trial.customer.OfdCustomerFacade;
+import ru.snm.ofd_trial.xml.OfdDeserializer;
+import ru.snm.ofd_trial.xml.OfdResponse;
+import ru.snm.ofd_trial.xml.OfdSerializer;
+import ru.snm.ofd_trial.xml.SimpleXmlFunctions;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
@@ -24,8 +33,12 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.powermock.api.mockito.PowerMockito.when;
+import static ru.snm.ofd_trial.customer.OfdCustomerFacade.TECH_ERROR_RESPONSE;
 
 /**
+ * Tests that only POST with XML payload is accepted.
  * @author snm
  */
 class HttpHandlerTest {
@@ -64,12 +77,20 @@ class HttpHandlerTest {
     }
 
     @BeforeAll
-    static void setUp() {
+    static void setUpTestContext() {
+        // all "beans" are just mocks - no real work is needed
+        OfdGlobalContext.initContext(
+                PowerMockito.mock( OfdDeserializer.class ),
+                // spoils default response, but this test does not check that behavior
+                PowerMockito.mock( OfdSerializer.class, invocationOnMock -> "<fake/>" ),
+                PowerMockito.mock( OfdCustomerAction.class ) );
+
         Properties props = new Properties();
         props.setProperty( OfdConfig.PROP_PATH, "/ofd" );
-        // there ought to be Spring's random port analog, but... no need of it
+        // there ought to be random port, but...
         props.setProperty( OfdConfig.PROP_PORT, "8888" );
         config = OfdConfig.getConfig( props );
+
         server = OfdMain.createAndStartHttp( config );
     }
 
@@ -91,6 +112,7 @@ class HttpHandlerTest {
     }
 
 
+    @Tag( "integration" )
     @ParameterizedTest
     @MethodSource( "requestAndCode" )
     @DisplayName( "test that only POST with XML is accepted" )
