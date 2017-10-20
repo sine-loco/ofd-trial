@@ -54,7 +54,7 @@ class HttpHandlerTest {
             throws UnsupportedEncodingException
     {
         String xml =
-                "<?xml version=\"1.0\" encoding=\"utf-8\"" +
+                "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
                         "<tag></tag>";
         http.setEntity( new StringEntity( xml ) );
         http.setHeader( "Accept", "application/xml" );
