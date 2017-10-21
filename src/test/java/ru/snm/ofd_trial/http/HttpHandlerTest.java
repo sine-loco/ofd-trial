@@ -20,12 +20,9 @@ import org.powermock.api.mockito.PowerMockito;
 import ru.snm.ofd_trial.OfdConfig;
 import ru.snm.ofd_trial.OfdGlobalContext;
 import ru.snm.ofd_trial.OfdMain;
-import ru.snm.ofd_trial.customer.OfdCustomerAction;
-import ru.snm.ofd_trial.customer.OfdCustomerFacade;
+import ru.snm.ofd_trial.customer_service.OfdCustomerAction;
 import ru.snm.ofd_trial.xml.OfdDeserializer;
-import ru.snm.ofd_trial.xml.OfdResponse;
 import ru.snm.ofd_trial.xml.OfdSerializer;
-import ru.snm.ofd_trial.xml.SimpleXmlFunctions;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
@@ -35,7 +32,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.powermock.api.mockito.PowerMockito.when;
-import static ru.snm.ofd_trial.customer.OfdCustomerFacade.TECH_ERROR_RESPONSE;
 
 /**
  * Tests that only POST with XML payload is accepted.
@@ -95,7 +91,10 @@ class HttpHandlerTest {
     }
 
     @AfterAll
-    static void tearDown() { server.stop( 0 ); }
+    static void tearDown() {
+        OfdGlobalContext.clearContext();
+        server.stop( 0 );
+    }
 
     static Stream<Arguments> requestAndCode() throws UnsupportedEncodingException {
         final String uri = "http://localhost:" + config.port + config.path;

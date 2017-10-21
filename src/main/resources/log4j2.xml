@@ -8,12 +8,12 @@
   </appenders>
 
   <loggers>
-    <logger name="ru.snm.ofd_trial" level="trace" additivity="false">
+    <async-logger name="ru.snm.ofd_trial" level="trace" additivity="false">
       <appender-ref ref="console" />
-    </logger>
+    </async-logger>
 
-    <root level="warn">
+    <async-root level="warn">
       <appender-ref ref="console" />
-    </root>
+    </async-root>
   </loggers>
 </configuration>

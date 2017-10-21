@@ -5,7 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
-import ru.snm.ofd_trial.customer.OfdCustomerFacade;
+import ru.snm.ofd_trial.customer_service.OfdCustomerFacade;
 import ru.snm.ofd_trial.http.OfdCustomerHandler;
 import ru.snm.ofd_trial.xml.SimpleXmlFunctions;
 
@@ -36,7 +36,7 @@ public class OfdMain {
         HttpServer server = createAndStartHttp( config );
 
         logger.info( "server started" );
-
+        
         Runtime.getRuntime().addShutdownHook( new Thread( () -> {
             logger.trace( "will stop the server" );
             server.stop( 0 );

@@ -1,6 +1,6 @@
 package ru.snm.ofd_trial;
 
-import ru.snm.ofd_trial.customer.OfdCustomerAction;
+import ru.snm.ofd_trial.customer_service.OfdCustomerAction;
 import ru.snm.ofd_trial.xml.OfdDeserializer;
 import ru.snm.ofd_trial.xml.OfdSerializer;
 
@@ -30,6 +30,10 @@ public final class OfdGlobalContext {
             throw new IllegalStateException( "Global context is already initialized" );
         }
         instance = new OfdGlobalContext( deserializer, serializer, service );
+    }
+
+    public static synchronized void clearContext() {
+        instance = null;
     }
 
     /**

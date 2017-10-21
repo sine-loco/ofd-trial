@@ -1,0 +1,19 @@
+
+<request>
+    <request-type>CREATE-AGT</request-type>
+    <extra name="login">123456</extra>
+    <extra name="password">pwd</extra>
+</request>
+??
+<request>
+    <request-type>GET-BALANCE</request-type>
+    <extra name="login">123456</extra>
+    <extra name="password">pwd</extra>
+</request>
+??
+<request>
+    <request-type>WTF</request-type>
+    <extra name="login">123456</extra>
+    <extra name="password">pwd</extra>
+</request>
+??

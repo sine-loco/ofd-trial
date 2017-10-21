@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration name="ofd-trial" status="warn" monitorInterval="30">
+<configuration name="ofd-trial-test" status="warn" monitorInterval="30">
 
   <appenders>
     <Console name="console" target="SYSTEM_OUT">

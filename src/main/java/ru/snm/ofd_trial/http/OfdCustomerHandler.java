@@ -3,7 +3,8 @@ package ru.snm.ofd_trial.http;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.snm.ofd_trial.OfdGlobalContext;
-import ru.snm.ofd_trial.customer.OfdCustomerAction;
+import ru.snm.ofd_trial.customer_service.OfdCustomerAction;
+import ru.snm.ofd_trial.customer_service.OfdUnsupportedActionException;
 import ru.snm.ofd_trial.xml.*;
 
 import javax.ws.rs.Consumes;
@@ -14,7 +15,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 
-import static ru.snm.ofd_trial.customer.OfdCustomerFacade.TECH_ERROR_RESPONSE;
+import static ru.snm.ofd_trial.customer_service.OfdCustomerFacade.TECH_ERROR_RESPONSE;
 
 /**
  * @author snm
@@ -45,7 +46,7 @@ public class OfdCustomerHandler {
     @Consumes( MediaType.APPLICATION_XML )
     @Produces( MediaType.APPLICATION_XML )
     public String handleRequest( @Context Request request, String xml ) {
-        logger.trace( "XML: {}", xml );
+        logger.trace( "XML: \n{}", xml );
 
         String result = I_AM_BROKEN_RESPONSE;
 
@@ -62,6 +63,8 @@ public class OfdCustomerHandler {
                 b) anyway, I have no control over HTTP codes :) */
         } catch ( OfdSerializationException e ) {
             logger.error( "Could not serialize response", e );
+        } catch ( OfdUnsupportedActionException e ) {
+            logger.error( "Received unsupported request type", e );
         } catch ( RuntimeException e ) {
             logger.error( "Unexpected error", e );
         }
