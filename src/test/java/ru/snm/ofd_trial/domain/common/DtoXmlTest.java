@@ -1,27 +1,27 @@
-package ru.snm.ofd_trial.xml;
+package ru.snm.ofd_trial.domain.common;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvFileSource;
-import org.junit.jupiter.params.provider.MethodSource;
+import ru.snm.ofd_trial.xml.SimpleXmlFunctions;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
 import static java.lang.String.valueOf;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static ru.snm.ofd_trial.xml.OfdResponseTags.*;
+import static ru.snm.ofd_trial.domain.common.OfdResponseTags.*;
 
 /**
+ * Tests serialization and deserialization of DTOs.
+ *
  * @author snm
  */
-class XmlTest {
+class DtoXmlTest {
     @Tag( "unit" )
     @ParameterizedTest
     @CsvFileSource(resources = "/xml/valid-req.csv")
@@ -47,38 +47,38 @@ class XmlTest {
         OfdResponse rsWithExtra = new OfdResponse( RESULT_CODE, map );
         OfdResponse rsWithoutExtra = new OfdResponse( RESULT_CODE );
 
-        assertAll( "serialization",
+        Assertions.assertAll( "serialization",
                 () -> {
                     String xml = SimpleXmlFunctions.serialize( rsWithExtra );
 
-                    assertAll( "with extra: all tags are present",
-                            () -> assertTrue( xml.contains( asXml( EN_RESPONSE ) ),
+                    Assertions.assertAll( "with extra: all tags are present",
+                            () -> Assertions.assertTrue( xml.contains( asXml( EN_RESPONSE ) ),
                                     EN_RESPONSE ),
-                            () -> assertTrue( xml.contains( asXml( EN_RESULT_CODE ) ),
+                            () -> Assertions.assertTrue( xml.contains( asXml( EN_RESULT_CODE ) ),
                                     EN_RESULT_CODE ),
-                            () -> assertTrue( xml.contains( "<" + EN_EXTRA ) ,
+                            () -> Assertions.assertTrue( xml.contains( "<" + EN_EXTRA ) ,
                                     EN_EXTRA ),
-                            () -> assertTrue( xml.contains( AN_NAME_EXTRA ),
+                            () -> Assertions.assertTrue( xml.contains( AN_NAME_EXTRA ),
                                     AN_NAME_EXTRA )
                     );
 
-                    assertAll( "all values are serialized",
-                            () -> assertTrue( xml.contains( KEY_1 ) ),
-                            () -> assertTrue( xml.contains( KEY_2 ) ),
-                            () -> assertTrue( xml.contains( VAL_1 ) ),
-                            () -> assertTrue( xml.contains( VAL_2 ) ),
-                            () -> assertTrue( xml.contains( valueOf( RESULT_CODE ) ) ) );
+                    Assertions.assertAll( "all values are serialized",
+                            () -> Assertions.assertTrue( xml.contains( KEY_1 ) ),
+                            () -> Assertions.assertTrue( xml.contains( KEY_2 ) ),
+                            () -> Assertions.assertTrue( xml.contains( VAL_1 ) ),
+                            () -> Assertions.assertTrue( xml.contains( VAL_2 ) ),
+                            () -> Assertions.assertTrue( xml.contains( valueOf( RESULT_CODE ) ) ) );
                 },
                 () -> {
                     String xml = SimpleXmlFunctions.serialize( rsWithoutExtra );
 
-                    assertAll( "without extra: only required tags are present",
-                            () -> assertTrue( xml.contains( asXml( EN_RESPONSE ) ) ),
-                            () -> assertTrue( xml.contains( asXml( EN_RESULT_CODE ) ) ),
-                            () -> assertFalse( xml.contains( "<" + EN_EXTRA ) )
+                    Assertions.assertAll( "without extra: only required tags are present",
+                            () -> Assertions.assertTrue( xml.contains( asXml( EN_RESPONSE ) ) ),
+                            () -> Assertions.assertTrue( xml.contains( asXml( EN_RESULT_CODE ) ) ),
+                            () -> Assertions.assertFalse( xml.contains( "<" + EN_EXTRA ) )
                     );
 
-                    assertTrue( xml.contains( valueOf( RESULT_CODE ) ),
+                    Assertions.assertTrue( xml.contains( valueOf( RESULT_CODE ) ),
                             "result-code is serialized" );
                 }
         );
@@ -87,11 +87,4 @@ class XmlTest {
     static String asXml( String tag ) {
         return "<" + tag + ">";
     }
-
-    static Stream<Arguments> deserialization() {
-        return Stream.of(
-                Arguments.of()
-                );
-    }
-
 }

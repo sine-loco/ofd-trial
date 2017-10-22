@@ -1,5 +1,6 @@
 package ru.snm.ofd_trial.http;
 
+import com.jolbox.bonecp.BoneCPDataSource;
 import com.sun.net.httpserver.HttpServer;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.*;
@@ -9,6 +10,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +22,7 @@ import org.powermock.api.mockito.PowerMockito;
 import ru.snm.ofd_trial.OfdConfig;
 import ru.snm.ofd_trial.OfdGlobalContext;
 import ru.snm.ofd_trial.OfdMain;
-import ru.snm.ofd_trial.customer_service.OfdCustomerAction;
+import ru.snm.ofd_trial.domain.common.OfdCustomerAction;
 import ru.snm.ofd_trial.xml.OfdDeserializer;
 import ru.snm.ofd_trial.xml.OfdSerializer;
 
@@ -31,6 +33,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
+import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 /**
@@ -74,20 +77,24 @@ class HttpHandlerTest {
 
     @BeforeAll
     static void setUpTestContext() {
+        Properties props = new Properties();
+        props.setProperty( OfdConfig.PROP_PATH, "/ofd" );
+        // there ought to be random port, but...
+        props.setProperty( OfdConfig.PROP_PORT, "8888" );
+        config = new OfdConfig( props );
+
         // all "beans" are just mocks - no real work is needed
         OfdGlobalContext.initContext(
                 PowerMockito.mock( OfdDeserializer.class ),
                 // spoils default response, but this test does not check that behavior
                 PowerMockito.mock( OfdSerializer.class, invocationOnMock -> "<fake/>" ),
-                PowerMockito.mock( OfdCustomerAction.class ) );
+                PowerMockito.mock( OfdCustomerAction.class ),
+                mock( BoneCPDataSource.class ),
+                mock( Flyway.class ),
+                config );
 
-        Properties props = new Properties();
-        props.setProperty( OfdConfig.PROP_PATH, "/ofd" );
-        // there ought to be random port, but...
-        props.setProperty( OfdConfig.PROP_PORT, "8888" );
-        config = OfdConfig.getConfig( props );
 
-        server = OfdMain.createAndStartHttp( config );
+        server = OfdMain.startHttpServer( config );
     }
 
     @AfterAll

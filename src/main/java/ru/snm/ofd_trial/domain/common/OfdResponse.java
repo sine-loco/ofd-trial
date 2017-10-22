@@ -1,4 +1,4 @@
-package ru.snm.ofd_trial.xml;
+package ru.snm.ofd_trial.domain.common;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementMap;
@@ -7,8 +7,8 @@ import org.simpleframework.xml.Root;
 import java.util.Collections;
 import java.util.Map;
 
-import static ru.snm.ofd_trial.xml.OfdResponseTags.*;
-import static ru.snm.ofd_trial.xml.SimpleXmlFunctions.extraToString;
+import static ru.snm.ofd_trial.domain.common.OfdResponseTags.*;
+import static ru.snm.ofd_trial.domain.common.OfdDtoHelper.extraToString;
 
 /**
  * @author snm

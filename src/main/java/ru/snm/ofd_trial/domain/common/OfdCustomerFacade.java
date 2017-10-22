@@ -1,9 +1,9 @@
-package ru.snm.ofd_trial.customer_service;
+package ru.snm.ofd_trial.domain.common;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.snm.ofd_trial.xml.OfdRequest;
-import ru.snm.ofd_trial.xml.OfdResponse;
+import ru.snm.ofd_trial.domain.account.CreateAgtAction;
+import ru.snm.ofd_trial.domain.account.GetBalanceAction;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -11,35 +11,31 @@ import java.util.Map;
 import static java.util.stream.Collectors.toMap;
 
 /**
- * Root logic for all customer_service operations.
+ * Root logic for all account operations.
  *
  * @author snm
  */
 public class OfdCustomerFacade {
     private final static Logger logger = LogManager.getLogger();
 
-    // smells like a leaked abstraction. A bit, maybe :)
-    /** Response for any technical error */
-    public final static OfdResponse TECH_ERROR_RESPONSE = new OfdResponse( 2 );
-
     public static OfdResponse processRequest( OfdRequest request ) {
         logger.trace( "facade requested: {}", request );
-        return Action.actionFor( request ).processRequest( request );
+        return AccountAction.actionFor( request ).processRequest( request );
     }
 
 
-    private enum Action implements OfdCustomerAction {
-        CREATE_AGT ( "create-agt", CreateAgtAction::createAgt ),
+    private enum AccountAction implements OfdCustomerAction {
+        CREATE_AGT ( "CREATE-AGT", CreateAgtAction::createAgt ),
 
-        GET_BALANCE ( "get-balance", GetBalanceAction::processRequest ),
+        GET_BALANCE ( "GET-BALANCE", GetBalanceAction::processRequest ),
 
         UNSUPPORTED ( "", UnsupportedAction::reportUnsupported );
 
 
-        private static Map<String, Action> mapping;
+        private static Map<String, AccountAction> mapping;
 
         static {
-            mapping = Arrays.stream( Action.values() )
+            mapping = Arrays.stream( AccountAction.values() )
                     .filter( action -> action != UNSUPPORTED )
                     .collect( toMap( action -> action.rqType, action -> action ) );
         }
@@ -48,14 +44,14 @@ public class OfdCustomerFacade {
         private final String rqType;
         private final OfdCustomerAction action;
 
-        Action( String rqType, OfdCustomerAction action ) {
+        AccountAction( String rqType, OfdCustomerAction action ) {
             this.rqType = rqType;
             this.action = action;
         }
 
-        public static Action actionFor( OfdRequest request ) {
+        public static AccountAction actionFor( OfdRequest request ) {
             return mapping.getOrDefault(
-                    request.requestType.toLowerCase(), UNSUPPORTED );
+                    request.requestType.toUpperCase(), UNSUPPORTED );
         }
 
         @Override

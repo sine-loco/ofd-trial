@@ -1,8 +1,9 @@
 package ru.snm.ofd_trial.xml;
 
-import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import org.simpleframework.xml.stream.Format;
+import ru.snm.ofd_trial.domain.common.OfdRequest;
+import ru.snm.ofd_trial.domain.common.OfdResponse;
 
 import java.io.StringWriter;
 import java.util.Iterator;
@@ -42,28 +43,4 @@ public abstract class SimpleXmlFunctions {
         }
     }
 
-    public static String extraToString( Map<String, String> extra ) {
-        StringBuilder result = new StringBuilder();
-        result.append( "{" );
-        Iterator<Map.Entry<String, String>> iterator = extra.entrySet().iterator();
-        String key;
-        Map.Entry<String, String> next;
-        for (;;) {
-            next = iterator.next();
-            key = next.getKey();
-            result.append( key ).append( "=" );
-            if ( "password".equalsIgnoreCase( key ) ) {
-              result.append( "***" );
-            } else {
-              result.append( next.getValue() );
-            }
-            if ( iterator.hasNext() ) {
-                result.append( ", " );
-            } else {
-                break;
-            }
-        }
-        result.append( "}" );
-        return result.toString();
-    }
 }

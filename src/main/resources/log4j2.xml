@@ -8,12 +8,16 @@
   </appenders>
 
   <loggers>
-    <async-logger name="ru.snm.ofd_trial" level="trace" additivity="false">
+    <AsyncLogger name="ru.snm.ofd_trial" level="trace" additivity="false">
       <appender-ref ref="console" />
-    </async-logger>
+    </AsyncLogger>
 
-    <async-root level="warn">
+    <AsyncLogger name="org.flywaydb" level="trace" additivity="false">
       <appender-ref ref="console" />
-    </async-root>
+    </AsyncLogger>
+
+    <AsyncRoot level="warn">
+      <appender-ref ref="console" />
+    </AsyncRoot>
   </loggers>
 </configuration>

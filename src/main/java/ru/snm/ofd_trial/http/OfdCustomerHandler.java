@@ -3,8 +3,10 @@ package ru.snm.ofd_trial.http;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ru.snm.ofd_trial.OfdGlobalContext;
-import ru.snm.ofd_trial.customer_service.OfdCustomerAction;
-import ru.snm.ofd_trial.customer_service.OfdUnsupportedActionException;
+import ru.snm.ofd_trial.domain.common.OfdCustomerAction;
+import ru.snm.ofd_trial.domain.common.OfdRequest;
+import ru.snm.ofd_trial.domain.common.OfdResponse;
+import ru.snm.ofd_trial.domain.common.OfdUnsupportedActionException;
 import ru.snm.ofd_trial.xml.*;
 
 import javax.ws.rs.Consumes;
@@ -15,7 +17,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 
-import static ru.snm.ofd_trial.customer_service.OfdCustomerFacade.TECH_ERROR_RESPONSE;
+import static ru.snm.ofd_trial.domain.common.OfdDtoHelper.TECH_ERROR;
 
 /**
  * @author snm
@@ -39,7 +41,7 @@ public class OfdCustomerHandler {
         this.serializer = context.getSerializer();
         this.service = context.getService();
 
-        I_AM_BROKEN_RESPONSE = serializer.serialize( TECH_ERROR_RESPONSE );
+        I_AM_BROKEN_RESPONSE = serializer.serialize( TECH_ERROR );
     }
 
     @POST

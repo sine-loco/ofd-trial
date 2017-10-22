@@ -1,4 +1,4 @@
-package ru.snm.ofd_trial.customer_service;
+package ru.snm.ofd_trial.domain.common;
 
 import ru.snm.ofd_trial.OfdException;
 

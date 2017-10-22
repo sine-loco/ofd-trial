@@ -1,7 +1,4 @@
-package ru.snm.ofd_trial.customer_service;
-
-import ru.snm.ofd_trial.xml.OfdRequest;
-import ru.snm.ofd_trial.xml.OfdResponse;
+package ru.snm.ofd_trial.domain.common;
 
 /**
  * @author snm
