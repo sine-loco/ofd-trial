@@ -23,40 +23,40 @@ public class OfdMain {
     private final static Logger logger = LogManager.getLogger();
 
     public static void main( String[] args ) {
-        // fixme read external ones
-        Properties props = new Properties();
-        props.setProperty( OfdConfig.PROP_PATH, "/ofd" );
-        props.setProperty( OfdConfig.PROP_PORT, "8080" );
+        try {
+            Properties props = new Properties();
+            props.load( OfdMain.class.getClassLoader()
+                    .getResourceAsStream( "ofd-trial.properties" ) );
 
-        props.setProperty( OfdConfig.PROP_DB_URL, "jdbc:hsqldb:hsql://localhost:9001/memDb" );
+            OfdConfig config = new OfdConfig( props );
 
+            BoneCPDataSource datasource = datasource( config );
+            Flyway flyway = flyway( datasource );
 
-        OfdConfig config = new OfdConfig( props );
+            OfdGlobalContext.initContext(
+                    SimpleXmlFunctions::deserialize,
+                    SimpleXmlFunctions::serialize,
+                    OfdCustomerFacade::processRequest,
+                    datasource,
+                    flyway,
+                    config );
 
-        BoneCPDataSource datasource = datasource( config );
-        Flyway flyway = flyway( datasource );
+            flyway.migrate();
 
-        OfdGlobalContext.initContext(
-                SimpleXmlFunctions::deserialize,
-                SimpleXmlFunctions::serialize,
-                OfdCustomerFacade::processRequest,
-                datasource,
-                flyway,
-                config );
+            HttpServer httpServer = startHttpServer( config );
 
-        flyway.migrate();
+            logger.info( "HTTP server started" );
 
-        HttpServer httpServer = startHttpServer( config );
+            Runtime.getRuntime().addShutdownHook( new Thread( () -> {
+                logger.trace( "will clear global context" );
+                OfdGlobalContext.clearContext();
 
-        logger.info( "HTTP server started" );
-
-        Runtime.getRuntime().addShutdownHook( new Thread( () -> {
-            logger.trace( "will clear global context" );
-            OfdGlobalContext.clearContext();
-
-            logger.trace( "will stop the HTTP server" );
-            httpServer.stop( 0 );
-        } ) );
+                logger.trace( "will stop the HTTP server" );
+                httpServer.stop( 0 );
+            } ) );
+        } catch ( Exception e ) {
+            logger.error( "could not start", e );
+        }
     }
 
     public static Flyway flyway( DataSource datasource ) {
