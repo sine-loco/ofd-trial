@@ -19,16 +19,23 @@ public abstract class SimpleXmlFunctions {
 
     private SimpleXmlFunctions() {}
 
-    public static OfdRequest deserialize( String xml )
+    public static <T> T deserialize( String xml, Class<T> clazz )
             throws OfdDeserializationException
     {
         try {
-            return persister.read( OfdRequest.class, xml );
+            return persister.read( clazz, xml );
         } catch ( Exception e ) {
             throw new OfdDeserializationException(
                     "Could not deserialize [" + xml + "]", e );
         }
     }
+
+    public static OfdRequest deserialize( String xml )
+            throws OfdDeserializationException
+    {
+        return deserialize( xml, OfdRequest.class );
+    }
+
 
     public static String serialize( OfdResponse response )
             throws OfdSerializationException

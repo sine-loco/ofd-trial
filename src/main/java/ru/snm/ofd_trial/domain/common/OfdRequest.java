@@ -18,7 +18,7 @@ public class OfdRequest {
     public final String requestType;
 
     @ElementMap( entry = EN_EXTRA, key = AN_NAME_EXTRA, attribute = true, inline = true )
-    public final Map<String, String> extra;
+    final Map<String, String> extra;
 
     public OfdRequest(
             @Element( name = EN_REQUEST_TYPE )

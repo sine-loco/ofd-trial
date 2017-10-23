@@ -16,7 +16,7 @@ import static ru.snm.ofd_trial.domain.common.OfdDtoHelper.extraToString;
 @Root( name = EN_RESPONSE )
 public class OfdResponse {
     @Element( name = EN_RESULT_CODE )
-    final int resultCode;
+    public final int resultCode;
 
     @ElementMap( entry = EN_EXTRA, key = AN_NAME_EXTRA,
             attribute = true, inline = true, required = false )
@@ -29,7 +29,11 @@ public class OfdResponse {
      *     If no extra is needed, use {@linkplain OfdResponse#OfdResponse(int)}
      * @throws IllegalArgumentException If extra is {@code null}
      */
-    public OfdResponse( int resultCode, Map<String, String> extra )
+    public OfdResponse(
+            @Element( name = EN_RESULT_CODE ) int resultCode,
+            @ElementMap( entry = EN_EXTRA, key = AN_NAME_EXTRA,
+                        attribute = true, inline = true, required = false )
+                    Map<String, String> extra )
         throws IllegalArgumentException
     {
         this.resultCode = resultCode;
@@ -40,7 +44,7 @@ public class OfdResponse {
     }
 
     /** For result-code only. */
-    public OfdResponse( int resultCode ) {
+    public OfdResponse( @Element( name = EN_RESULT_CODE ) int resultCode ) {
         this( resultCode, Collections.emptyMap() );
     }
 

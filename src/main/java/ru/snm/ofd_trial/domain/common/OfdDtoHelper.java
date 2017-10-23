@@ -29,7 +29,9 @@ public abstract class OfdDtoHelper {
         return request.extra.get( "login" );
     }
 
-
+    public static String getBalanceFrom( OfdResponse response ) {
+        return response.extra.get( "balance" );
+    }
 
 
     public static OfdResponseBuilder ok() {

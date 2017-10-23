@@ -59,7 +59,7 @@ public class OfdMain {
         } ) );
     }
 
-    private static Flyway flyway( DataSource datasource ) {
+    public static Flyway flyway( DataSource datasource ) {
         Flyway flyway = new Flyway();
         flyway.setDataSource( datasource );
         flyway.setSchemas( "OFD" );
@@ -69,7 +69,7 @@ public class OfdMain {
         return flyway;
     }
 
-    private static BoneCPDataSource datasource( OfdConfig config ) {
+    public static BoneCPDataSource datasource( OfdConfig config ) {
         // Class.forName( config.dbDriver);
         BoneCPDataSource ds = new BoneCPDataSource();
         ds.setJdbcUrl( config.dbUrl );

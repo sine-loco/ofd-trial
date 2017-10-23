@@ -1,0 +1,24 @@
+<request>
+    <request-type>GET-BALANCE</request-type>
+    <extra name="login">${user}</extra>
+    <extra name="password">${password}</extra>
+</request> ~ 0
+??
+<request>
+    <request-type>GET-BALANCE</request-type>
+    <extra name="login">_invalid_</extra>
+    <extra name="password">${password}</extra>
+</request> ~ 3
+??
+<request>
+    <request-type>GET-BALANCE</request-type>
+    <extra name="login">${user}</extra>
+    <extra name="password">_invalid_</extra>
+</request> ~ 4
+??
+<request>
+    <request-type>WTF?!</request-type>
+    <extra name="login">user</extra>
+    <extra name="password">password</extra>
+</request> ~ 2
+??
