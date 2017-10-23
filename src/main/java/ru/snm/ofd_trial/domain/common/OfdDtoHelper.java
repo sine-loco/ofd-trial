@@ -13,6 +13,7 @@ public abstract class OfdDtoHelper {
 
     /** Response for case where only OK status without any additional data is needed */
     public final static OfdResponse OK_WITH_NO_DATA = new OfdResponse( 0 );
+    public static final OfdResponse USER_ALREADY_EXISTS = new OfdResponse( 1 );
     /** Response for any technical error */
     public final static OfdResponse TECH_ERROR = new OfdResponse( 2 );
     public static final OfdResponse NO_USER = new OfdResponse( 3 );
