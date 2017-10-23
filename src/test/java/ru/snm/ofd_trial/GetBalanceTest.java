@@ -137,8 +137,6 @@ public class GetBalanceTest {
                         }
                     }
             );
-
-
         } catch ( Exception e ) {
             logger.error( e.getMessage(), e );
             fail( "should not throw" );
